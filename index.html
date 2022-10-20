@@ -1,0 +1,193 @@
+
+<html>
+<head>
+<title>Seamless texture check</title>
+
+<style>
+	html, body {
+		margin: 0;
+		padding: 0;
+		width: 100%;
+		height: 200vh;
+		background-size: 150px;
+		font-family:"georgia", "Calibri";
+		background-image: url("default.jpg");
+		
+	}
+	.entry{
+    width:100%;
+    height:100vh;
+    display: table;
+	}
+	.container {
+		display: table-cell;
+		text-align: center;
+		vertical-align: middle;
+	}
+	.content {
+		background-color: red; /* just for the demo */
+		display: inline-block;
+		text-align: left;
+	}
+	a, a:visited, a:active{
+		text-decoration:none;
+		color:#00f;
+	}
+	a:hover{
+		color: #000;
+	}
+
+	input{
+		background-color:transparent;
+		font-family:"Calibri";
+		text-align: center;
+		border:0px;
+	}
+	#container{
+		width:500px;
+		background-color:#cccc;
+		margin:auto;
+		content-positioning-anchor:50% 50%;
+		padding: 30px;
+
+		//opacity : 0.5;
+		-moz-border-radius: 15px;
+		border-radius: 15px;
+	}
+	#container:hover{
+		opacity : 1;
+	}
+	#setWidthSlider{
+		width:100%;
+	}
+	h1{
+		text-transform:uppercase;
+	}
+</style>
+
+<!--GOOGLESTATS-->
+<script type="text/javascript">var _gaq=_gaq||[];_gaq.push(['_setAccount','UA-18989804-2']);_gaq.push(['_trackPageview']);(function(){var ga=document.createElement('script');ga.type='text/javascript';ga.async=true;ga.src=('https:'==document.location.protocol?'https://ssl':'http://www')+'.google-analytics.com/ga.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(ga,s);})();</script>
+<!--GOOGLESTATS-->
+
+
+</head>
+<body>
+
+<div class="entry">
+  <div class="container">
+      <div class="content" id=container>
+        <h1>seamless texture checker</h1>
+        Quick tool to test & check seamless texture<br>
+        Drag and drop local image file anywhere in page
+        <br>
+        <!--Original resolution <input id="imageWidth" type="text" size=4 readonly> x <input id="imageHeight" type="text" size="4" readonly>-->
+        <!--<input type="file" id="files" name="files[]"/>-->
+        <br>
+        Tile width <input id="setWidthSlider" type="range" name="points" min="1" max="20" value="3">
+        <br>
+        <br>
+        <small>
+        2014.01.26 first online. Tested on Chrome & Firefox<br>
+        2022.09.29 also as a plugin on <a href="https://www.photopea.com">photopea</a><br>
+        EC | <a href="https://www.pycheung.com">web</a> | <a href="https://twitter.com/pycweblog">twitter</a> | <a href="https://www.buymeacoffee.com/pycheung">Buy me a coffee</a>
+		</small>
+
+      </div>
+  </div>
+</div>
+
+
+
+
+<script>
+	// drag and drop adopted from http://www.html5rocks.com/en/tutorials/file/dndfiles/
+
+	function handleFileSelect(evt) {
+		//var files = evt.target.files; // FileList object
+		var files = evt.dataTransfer.files;
+		var image = new Image();
+
+		evt.stopPropagation();
+		evt.preventDefault();
+
+		// Loop through the FileList and render image files as thumbnails.
+		for (var i = 0, f; f = files[i]; i++) {
+
+		  // Only process image files.
+		  if (!f.type.match('image.*')) {
+			continue;
+		  }
+
+		  var reader = new FileReader();
+
+		  // Closure to capture the file information.
+		  reader.onload = (function(theFile) {
+			return function(e) {
+			  // Render thumbnail.
+			  /*
+			  var span = document.createElement('span');
+			  span.innerHTML = ['<img class="thumb" src="', e.target.result,'" title="', escape(theFile.name), '"/>'].join('');
+			  document.getElementById('list').insertBefore(span, null);
+			  */
+			  
+			  
+			  image.src = e.target.result;
+			  image.onload = function() {
+				//alert(this.width);
+				//document.getElementById('imageWidth').value = this.width;
+				//document.getElementById('imageHeight').value = this.height;
+				document.body.style.backgroundImage="url('"+e.target.result+"')";
+
+			  };
+			};
+		  })(f);
+		  
+			handleDragLeave(evt);
+		  // Read in the image file as a data URL.
+		  reader.readAsDataURL(f);
+		}
+	}
+
+	function handleDragOver(evt) {
+		evt.stopPropagation();
+		evt.preventDefault();
+		evt.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+
+		document.getElementById('container').style.backgroundColor = '#888c';
+	}
+	function handleDragLeave(evt) {
+		document.getElementById('container').style.backgroundColor = '#cccc';
+	}
+	// Setup the dnd listeners.
+	//var dropZone = document.getElementById('container');
+	var dropZone = document.body;
+	dropZone.addEventListener('dragover', handleDragOver, false);
+	dropZone.addEventListener('dragleave', handleDragLeave, false);
+	dropZone.addEventListener('drop', handleFileSelect, false);
+
+	//document.getElementById('files').addEventListener('change', handleFileSelect, false);
+  
+  
+
+	/// set image width
+	var p = document.getElementById("setWidthSlider");
+
+	p.addEventListener("input", function() {
+		//document.body.style.backgroundSize="'"+p.value*100+"px'";
+		var widthpx = p.value*50;
+		//document.body.style.backgroundSize=widthpx;
+		document.body.style.backgroundSize=""+widthpx.toString()+"px";
+		console.log("'"+widthpx.toString()+"px'");
+		//document.body.style.backgroundSize='100px';
+		//alert("'"+p.value*100+"px'");
+	}, false); 
+
+  
+</script>
+
+
+
+
+
+</body>
+</html>
