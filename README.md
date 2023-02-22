@@ -7,3 +7,7 @@ For more information see https://www.pycheung.com/projects/seamless-texture-chec
 
 ## License
 MIT License
+
+## Buy me a coffee
+If you find it useful, I would appreciate it if you would buy me a coffee!
+https://www.buymeacoffee.com/pycheung
